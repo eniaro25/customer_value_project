@@ -71,3 +71,48 @@ A consolidated customer_insights table was created by combining RFM scores with 
 ## Dashboard Overview 
 
 The Looker Studio dashboard follows a three-layer structure: Customer Health Summary, Regional Retention Trends and Deep Dive Segmentation analysis. The customer_insights analytics model serves as the single source of truth for all visualisations.
+
+## Business Insights & Recommendations
+
+### 1. High Value Customers Drive Disproportionate Revenue
+
+RFM segmentation shows that a smaller group of “High Value” customers contributes a significant share of total revenue. These customers demonstrate strong recency, frequent purchases, and higher spend levels.
+
+**Recommendation:**
+Marketing budget should prioritise retention strategies such as loyalty rewards, early access promotions, and personalised offers rather than focusing solely on new customer acquisition.
+
+---
+
+### 2. Churn Risk Segment Represents a Recovery Opportunity
+
+Customers classified as “Churn Risk” or “At Risk” show declining recency despite previous purchasing behaviour. This indicates potential loss of future revenue if engagement is not reactivated.
+
+**Recommendation:**
+Implement re-engagement campaigns targeting these segments using email reminders, limited-time discounts, or remarketing through high-performing traffic sources.
+
+---
+
+### 3. Regional Differences Suggest Targeted UK/EU Growth Strategy
+
+Customer distribution and high-value concentration vary by country and state. Some regions generate more loyal and high-value customers, indicating stronger retention potential.
+
+**Recommendation:**
+Allocate marketing budget toward regions with higher retention rates rather than purely high acquisition volume. Regional messaging and localised promotions may improve lifetime value.
+
+---
+
+### 4. Recency Trends Highlight Importance of Continuous Engagement
+
+Average recency metrics suggest many customers have not purchased recently, even when overall customer counts remain high.
+
+**Recommendation:**
+Shift focus from one-time acquisition to lifecycle marketing, encouraging repeat purchases through subscription models, reminders, or personalised product recommendations.
+
+---
+
+### 5. Data Modelling Enables Scalable Customer Insights
+
+The star schema and RFM scoring model allow the business to track customer health over time and quickly identify behavioural changes.
+
+**Recommendation:**
+Maintain the customer insights model as a reusable analytics layer for future segmentation, experimentation, and performance tracking.
