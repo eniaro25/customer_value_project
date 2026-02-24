@@ -48,3 +48,8 @@ The project follows a layered SQL approach:
 - Analytical queries for RFM calculations
 
 Window functions and CTEs are introduced progressively to support customer ranking and lifecycle analysis.
+
+## RFM Methodology 
+
+RFM scores were calculated using NTILE(5) window functions to divide customers into equal-sized behavioural groups. 
+Recency scoring was inverted so that more recent customers receive higher scores. This ensures consistency across RFM metrics, where higher values always represent stronger customer engagement and value.
