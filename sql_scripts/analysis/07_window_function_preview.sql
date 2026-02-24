@@ -1,4 +1,4 @@
--- 06_window_function_preview.sql
+-- 07_window_function_preview.sql
 -- Purpose: Preview window function by ranking customers by total spend
 
 SELECT
