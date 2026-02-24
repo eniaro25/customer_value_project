@@ -67,3 +67,7 @@ This transformation layer bridges technical scoring with marketing-focused insig
 ## Customer Insight Model 
 
 A consolidated customer_insights table was created by combining RFM scores with user demographic data. This model serves as the primary data source for dashboarding and enables regional retention analysis and churn risk identification.
+
+## Dashboard Overview 
+
+The Looker Studio dashboard follows a three-layer structure: Customer Health Summary, Regional Retention Trends and Deep Dive Segmentation analysis. The customer_insights analytics model serves as the single source of truth for all visualisations.
