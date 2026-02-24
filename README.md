@@ -63,3 +63,7 @@ Customer segments were derived from RFM scores using rule-based logic to support
 Customers were grouped into High Value, Loyal, New Customer, At Risk and Churn Risk categories based on relative recency, frequency and monetary behaviour. 
 
 This transformation layer bridges technical scoring with marketing-focused insights used in the final dashboard.
+
+## Customer Insight Model 
+
+A consolidated customer_insights table was created by combining RFM scores with user demographic data. This model serves as the primary data source for dashboarding and enables regional retention analysis and churn risk identification.
