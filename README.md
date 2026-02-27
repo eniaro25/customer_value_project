@@ -21,6 +21,8 @@ Project structure follows a layered approach:
 - raw layer: original source tables
 - analytics layer: cleaned staging and modelled tables
 
+refer to data.md for further details on the original data 
+
 ## Data Cleaning
 Cancelled orders were excluded from revenue calculations to ensure accurate monetary metrics. Only transactions with status 'Complete' or 'Shipped' were included in the staging sales table. This ensures Customer Lifetime Value calculations are based on realised revenue rather than failed transactions.
 Recency was calculated using the dataset’s maximum order date rather than the system date to avoid negative values caused by simulated future transactions.
