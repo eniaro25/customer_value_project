@@ -15,7 +15,7 @@ The analysis was conducted using Google BigQuery.
 
 The dataset was stored and queried within a dedicated BigQuery project to ensure proper environment separation between raw and analytics layers.
 
-All modelling tables were created within the same dataset location to avoid cross-region query issues and ensure consistent performance.
+All modelling tables were created within the same dataset location (europe-west2) to avoid cross-region query issues and ensure consistent performance.
 
 Project structure follows a layered approach:
 - raw layer: original source tables
