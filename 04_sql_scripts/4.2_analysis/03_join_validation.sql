@@ -1,7 +1,6 @@
 -- 09_model_validation.sql
 -- Purpose: Validate star schema integrity and fact table correctness
--- Layer: Analytics
--- Author: Your Name
+
 -- Notes:
 --   - Validates joins did not create data loss
 --   - Confirms fact table grain (1 row per order_item)
