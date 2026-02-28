@@ -47,6 +47,7 @@ The project follows a layered SQL approach:
 - Staging layer for cleaned transactional data
 - Dimension tables for descriptive attributes
 - Fact table for transactional metrics
+- Validation script to ensure fact table grain integrity, surrogate key consistency, and revenue reconciliation after business filtering.
 - Analytical queries for RFM calculations
 
 Window functions and CTEs are introduced progressively to support customer ranking and lifecycle analysis.

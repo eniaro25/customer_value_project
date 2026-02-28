@@ -35,14 +35,12 @@ SELECT *
 FROM `clv-retail-analysis.raw_thelook_ecommerce.order_items`
 LIMIT 10;
 
-******COME BACK TO
-
+Each order item includes an order status, as the sale price is attached to each item as opposed to each order, the status of each item is used.
 
 SELECT *
 FROM `clv-retail-analysis.raw_thelook_ecommerce.products`
 LIMIT 10;
 
-****** COME BACK TO 
 
 Initial analysis focused on:
 - Validating joins between fact and dimension tables
