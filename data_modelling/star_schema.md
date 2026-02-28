@@ -5,8 +5,8 @@ Fact Table
   user_id, product_id, order_date, and sale_price.
 
 Dimension Tables
-- dim_users: customer attributes (country, state, traffic_source)
-- dim_products: product attributes
+- dim_users: customer attributes (country, age, gender)
+- dim_products: product attributes (category, retail price)
 - dim_dates: calendar attributes
 
 The star schema separates measurable transactions from descriptive
