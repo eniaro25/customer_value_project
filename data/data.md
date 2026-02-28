@@ -2,90 +2,131 @@
 
 ***INSERT IMAGE OF SOURCE SCHEMA 
 
-# Details of source fields 
-1. users
+## Database Schema: `thelook_ecommerce`
 
-## Information about registered customers
+This schema tracks end-to-end operations of an ecommerce platform, from web activity to fulfilment.
 
-id: Unique identifier for each user.
-first_name / last_name: User's name.
-email: User's contact email.
-age / gender: Demographic data.
-state / city / country / postal_code: Geographic location.
-latitude / longitude: Precise coordinates of the user.
-traffic_source: How the user found the site (e.g., Search, Facebook).
-created_at: Account creation timestamp.
+---
 
-1.1. orders
+### `orders`
 
-## Contains high-level information about customer orders.
+High-level order records.
 
-order_id: Unique identifier for each order.
-user_id: Identifier for the user who placed the order.
-status: Current status of the order (e.g., Shipped, Complete, Returned).
-gender: Gender information of the user.
-created_at: Timestamp when the order was created.
-returned_at: Timestamp when the order was returned.
-shipped_at: Timestamp when the order was shipped.
-delivered_at: Timestamp when the order was delivered.
-num_of_item: Total number of items in the order.
+| Column | Data Type | Key | Description |
+| --- | --- | --- | --- |
+| `order_id` | INTEGER | **PK** | Unique identifier for the order. |
+| `user_id` | INTEGER | **FK → users.id** | Customer who placed the order. |
+| `status` | STRING |  | Order state (e.g., Shipped, Complete, Processing). |
+| `gender` | STRING |  | Gender of the customer (as stored in source). |
+| `created_at` | TIMESTAMP |  | Order placement timestamp. |
+| `returned_at` | TIMESTAMP |  | Return timestamp (if applicable). |
+| `shipped_at` | TIMESTAMP |  | Departure from distribution centre. |
+| `delivered_at` | TIMESTAMP |  | Arrival at customer location. |
+| `num_of_item` | INTEGER |  | Total items in this order. |
 
-1.2. events
+---
 
-## Log of user activity and web traffic on the platform.
+### `order_items`
 
-id: Unique identifier for each event.
-user_id: ID of the user (if logged in).
-sequence_number: Order of the event within a session.
-session_id: Unique identifier for the browsing session.
-created_at: Timestamp of the activity.
-ip_address / city / state / postal_code: Location data derived from IP.
-browser: Web browser used.
-traffic_source: Source of the traffic.
-uri: The specific page URL visited.
-event_type: Action taken (e.g., Page View, Add to Cart, Purchase).
+Granular line-item details for every order.
 
-1.1.1 order_items
+| Column | Data Type | Key | Description |
+| --- | --- | --- | --- |
+| `id` | INTEGER | **PK** | Unique identifier for this line item. |
+| `order_id` | INTEGER | **FK → orders.order_id** | The order this line item belongs to. |
+| `user_id` | INTEGER | **FK → users.id** | Customer who purchased the item. |
+| `product_id` | INTEGER | **FK → products.id** | Product purchased. |
+| `inventory_item_id` | INTEGER | **FK → inventory_items.id** | Specific inventory unit sold. |
+| `status` | STRING |  | Status of this specific item. |
+| `sale_price` | FLOAT |  | Final price paid by the customer. |
+| `created_at` | TIMESTAMP |  | Line item record creation time. |
 
-## Detailed line-item data for every order.
+---
 
-id: Unique identifier for each order item.
-order_id: Link to the orders table.
-user_id: Link to the users table.
-product_id: Link to the products table.
-inventory_item_id: Link to the inventory_items table.
-status: Status of the specific item.
-created_at / shipped_at / delivered_at / returned_at: Timestamps for item lifecycle.
-sale_price: The price at which the item was sold.
+### `products`
 
-1.1.2. products
+Master product catalogue.
 
-## The master catalog of items available for sale.
+| Column | Data Type | Key | Description |
+| --- | --- | --- | --- |
+| `id` | INTEGER | **PK** | Unique product ID. |
+| `cost` | FLOAT |  | Wholesale cost. |
+| `category` | STRING |  | Product category (e.g., Jeans, Suits). |
+| `name` | STRING |  | Product title. |
+| `brand` | STRING |  | Brand name. |
+| `retail_price` | FLOAT |  | Suggested retail price. |
+| `department` | STRING |  | Department/demographic (e.g., Men, Women). |
+| `sku` | STRING |  | Stock Keeping Unit. |
+| `distribution_center_id` | INTEGER | **FK → distribution_centers.id** | Distribution centre for the product. |
 
-id: Unique identifier for each product.
-cost: Wholesale cost of the product.
-category: Product category (e.g., Jeans, Tops & Tees).
-name: Full name of the product.
-brand: Brand name of the product.
-retail_price: Suggested retail price.
-department: Target department (e.g., Men, Women).
-sku: Stock Keeping Unit identifier.
-distribution_center_id: ID of the center where the product is stocked.
+---
 
-1.1.3. inventory_items
+### `users`
 
-## Tracks individual items available in stock.
+Customer profile data.
 
-id: Unique identifier for each specific stock item.
-product_id: Link to the products catalog.
-created_at: When the item entered inventory.
-sold_at: When the item was purchased.
-cost / product_retail_price: Financial data for the item.
-product_category / product_name / product_brand: Denormalized product info.
-product_distribution_center_id: Where the item is physically located.
+| Column | Data Type | Key | Description |
+| --- | --- | --- | --- |
+| `id` | INTEGER | **PK** | Unique user ID. |
+| `first_name` | STRING |  | User’s first name. |
+| `last_name` | STRING |  | User’s last name. |
+| `email` | STRING |  | Contact email. |
+| `age` | INTEGER |  | User’s age. |
+| `city` | STRING |  | City of residence. |
+| `country` | STRING |  | Country of residence. |
+| `traffic_source` | STRING |  | Acquisition channel (e.g., Search, Facebook). |
+| `created_at` | TIMESTAMP |  | Account creation timestamp. |
 
-1.1.4 distribution_centers
+---
 
-id: Unique identifier for the center.
-name: Name of the facility.
-latitude / longitude: Geographic coordinates of the center.
+### `events`
+
+Web traffic and behaviour logs.
+
+| Column | Data Type | Key | Description |
+| --- | --- | --- | --- |
+| `id` | INTEGER | **PK** | Unique event ID. |
+| `user_id` | INTEGER | **FK → users.id (nullable)** | User associated with the event (NULL if guest). |
+| `sequence_number` | INTEGER |  | Step number within the session. |
+| `session_id` | STRING |  | Unique session identifier. |
+| `event_type` | STRING |  | Action type (e.g., View, Cart, Purchase). |
+| `uri` | STRING |  | Page path visited. |
+| `created_at` | TIMESTAMP |  | Timestamp of activity. |
+
+---
+
+### `inventory_items`
+
+Individual stock units.
+
+| Column | Data Type | Key | Description |
+| --- | --- | --- | --- |
+| `id` | INTEGER | **PK** | Unique inventory unit ID. |
+| `product_id` | INTEGER | **FK → products.id** | Product for this inventory unit. |
+| `created_at` | TIMESTAMP |  | When the unit was added to inventory. |
+| `sold_at` | TIMESTAMP |  | When the unit was sold. |
+| `cost` | FLOAT |  | Unit wholesale cost. |
+| `product_distribution_center_id` | INTEGER | **FK → distribution_centers.id** | Distribution centre holding the unit. |
+
+---
+
+### `distribution_centers`
+
+Warehouse location data.
+
+| Column | Data Type | Key | Description |
+| --- | --- | --- | --- |
+| `id` | INTEGER | **PK** | Unique distribution centre ID. |
+| `name` | STRING |  | Facility name. |
+| `latitude` | FLOAT |  | Geo-coordinate. |
+| `longitude` | FLOAT |  | Geo-coordinate. |
+
+---
+
+### Relationship Summary (PK → FK)
+
+- `users.id` ← `orders.user_id`, `order_items.user_id`, `events.user_id`
+- `orders.order_id` ← `order_items.order_id`
+- `products.id` ← `order_items.product_id`, `inventory_items.product_id`
+- `inventory_items.id` ← `order_items.inventory_item_id`
+- `distribution_centers.id` ← `products.distribution_center_id`, `inventory_items.product_distribution_center_id`
