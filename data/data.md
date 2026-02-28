@@ -1,6 +1,6 @@
 # Source Schema 
 
-***INSERT IMAGE OF SOURCE SCHEMA 
+Image attached
 
 ## Database Schema: `thelook_ecommerce`
 
