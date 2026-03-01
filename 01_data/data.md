@@ -1,6 +1,4 @@
-# Source Schema 
-
-Image attached
+Link to https://www.kaggle.com/datasets/daichiuchigashima/thelook-ecommerce
 
 ## Database Schema: `thelook_ecommerce`
 

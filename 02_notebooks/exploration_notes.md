@@ -2,12 +2,13 @@
 
 Most analysis was performed directly in BigQuery SQL.
 
-# Explore Available tables 
+## Source Schema Review & Assumptions
 
-After reviweing the source schema it was noted that:
-    the distribution_centers, events and inventory_items tables were not required for the RFM scores analysis and would not interfere with any other tables. 
-    the naming convetions regarding the timestamp events and addresses are unclear. The assumtion was made that the addresses and timestamp events are unique to each table. 
-    gender is included in the order table, the assumption is that this is taken from the user table, however this not relevant for the purposes of RFM score analysis.
+- The `distribution_centers`, `events`, and `inventory_items` tables were excluded as they are not required for RFM (Recency, Frequency, Monetary) analysis and do not impact analytical integrity.
+
+- Timestamp and address naming conventions were not fully standardised. It was assumed that these fields are unique to each table and represent entity-specific attributes.
+
+- The `gender` field in the `orders` table is assumed to originate from the `users` table. As it is not relevant to RFM scoring, it was excluded from the analytical model.
 
 ## Explore Relevant tables 
 
@@ -15,34 +16,33 @@ SELECT *
 FROM `clv-retail-analysis.raw_thelook_ecommerce.users`
 LIMIT 10;
 
-The user_id is imperative to analysis the RFM scores, the behavioural segmentation can be analysed based on location, gender or age. 
-For this project, location has been used at country level. The remaining fields are not required. 
+The `user_id` is imperative to analysis the RFM scores.
+
+The behavioural segmentation can be analysed based on location, gender or age. 
+
+All other user attributes were considered out of scope for the RFM scoring.
 
 SELECT *
 FROM `clv-retail-analysis.raw_thelook_ecommerce.orders`
 LIMIT 10;
-
-Noted order status includes 'Cancelled'
 
 SELECT DISTINCT (status)
 FROM `clv-retail-analysis.raw_thelook_ecommerce.orders`
 LIMIT 10 
 
-Noted order status includes 'Cancelled, Complete. Processing, Returned and Shipped'.
-To calculate revenue only statuses "Complete and Shipped" will be used. 
+Observed order status includes 'Cancelled, Complete. Processing, Returned and Shipped'.
+
+For revenue calculations only orders with status `Complete` and `Shipped` were included. 
 
 SELECT *
 FROM `clv-retail-analysis.raw_thelook_ecommerce.order_items`
 LIMIT 10;
 
-Each order item includes an order status, as the sale price is attached to each item as opposed to each order, the status of each item is used.
+Monetary calculations were performed at the `order_items` grain, as `sale_price` exists at item level. However, order validity was determined using the orders table.
 
-SELECT *
-FROM `clv-retail-analysis.raw_thelook_ecommerce.products`
-LIMIT 10;
+Only orders with status `Complete` or `Shipped` were included, ensuring that revenue reflects finalised transactions before aggregating item-level revenue to the customer level.
 
-
-Initial analysis focused on:
+Further analysis focused on:
 - Validating joins between fact and dimension tables
 - Testing window functions for customer ranking
 - Understanding recency distribution
