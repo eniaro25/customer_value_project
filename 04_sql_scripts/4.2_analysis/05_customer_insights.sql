@@ -1,23 +1,27 @@
--- 12_customer_insights.sql
+-- 13_customer_insights.sql
 -- Purpose: Final BI-ready customer mart
+-- Grain: 1 row per customer
 
-CREATE OR REPLACE TABLE `clv-retail-analysis.analytics.customer_insights` AS
+CREATE OR REPLACE TABLE `clv-retail-analysis.analytics.customer_insights`
+CLUSTER BY customer_segment AS
 
 SELECT
-    r.user_key,
-    r.user_id,
+    s.user_key,
+    s.user_id,
     u.age,
     u.age_group,
     u.country,
-    r.recency_days,
-    r.total_orders,
-    r.total_spent,
-    r.r_score,
-    r.f_score,
-    r.m_score,
-    r.customer_segment
+    s.recency_days,
+    s.total_orders,
+    s.total_spent,
+    s.r_score,
+    s.f_score,
+    s.m_score,
+    s.rfm_segment,
+    s.rfm_total_score,
+    s.customer_segment
 
-FROM `clv-retail-analysis.analytics.customer_rfm_scored` r
+FROM `clv-retail-analysis.analytics.customer_segments` s
 
 JOIN `clv-retail-analysis.analytics.dim_users` u
-    ON r.user_key = u.user_key;
+    ON s.user_key = u.user_key;

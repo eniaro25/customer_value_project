@@ -66,10 +66,8 @@ JOIN `clv-retail-analysis.analytics.customer_total_spent` s
     ON r.user_key = s.user_key;
 
 -- 11_customer_rfm_scored.sql
--- Purpose: Apply quintile scoring and segmentation
-
--- 11_customer_rfm_scored.sql
--- Purpose: Apply quintile scoring and business-friendly segmentation
+-- Purpose: Apply quintile scoring to RFM metrics
+-- Adds both rfm_segment (pattern) and rfm_total_score (strength)
 
 CREATE OR REPLACE TABLE `clv-retail-analysis.analytics.customer_rfm_scored`
 CLUSTER BY r_score, f_score, m_score AS
@@ -78,7 +76,7 @@ WITH scored AS (
 
     SELECT *,
 
-        -- Recency: lower days = better customer
+        -- Recency: lower days = better
         6 - NTILE(5) OVER (ORDER BY recency_days ASC) AS r_score,
 
         NTILE(5) OVER (ORDER BY total_orders ASC) AS f_score,
@@ -89,32 +87,42 @@ WITH scored AS (
 
 SELECT
     *,
-    CONCAT(CAST(r_score AS STRING),
-           CAST(f_score AS STRING),
-           CAST(m_score AS STRING)) AS rfm_segment,
+    
+    -- Behaviour fingerprint
+    CONCAT(
+        CAST(r_score AS STRING),
+        CAST(f_score AS STRING),
+        CAST(m_score AS STRING)
+    ) AS rfm_segment,
 
-    CASE
-        -- Best customers: recent + frequent + high spend
-        WHEN r_score >= 4 AND f_score >= 4 AND m_score >= 4
-            THEN 'High Value'
-
-        -- Frequent and engaged but not top spenders
-        WHEN r_score >= 3 AND f_score >= 4
-            THEN 'Loyal'
-
-        -- Very recent but low frequency
-        WHEN r_score >= 4 AND f_score <= 2
-            THEN 'New Customer'
-
-        -- High historical frequency but low recent activity
-        WHEN r_score <= 2 AND f_score >= 3
-            THEN 'At Risk'
-
-        -- Low recency + low frequency
-        WHEN r_score <= 2 AND f_score <= 2
-            THEN 'Churn Risk'
-
-        ELSE 'Loyal'
-    END AS customer_segment
+    -- Overall strength score (3–15 scale)
+    r_score + f_score + m_score AS rfm_total_score
 
 FROM scored;
+
+-- 12_customer_segments.sql
+-- Purpose: Assign business segments
+
+CREATE OR REPLACE TABLE `clv-retail-analysis.analytics.customer_segments` AS
+
+SELECT
+    user_key,
+    user_id,
+    recency_days,
+    total_orders,
+    total_spent,
+    r_score,
+    f_score,
+    m_score,
+    rfm_segment,
+    rfm_total_score,
+
+    CASE
+        WHEN r_score >= 4 AND f_score >= 4 AND m_score >= 4 THEN 'High Value'
+        WHEN r_score >= 3 AND f_score >= 3 THEN 'Loyal'
+        WHEN r_score = 5 AND f_score <= 2 THEN 'New Customer'
+        WHEN r_score <= 2 AND f_score >= 3 THEN 'At Risk'
+        ELSE 'Churn Risk'
+    END AS customer_segment
+
+FROM `clv-retail-analysis.analytics.customer_rfm_scored`;

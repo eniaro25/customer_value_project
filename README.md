@@ -8,6 +8,7 @@ This project analyses customer lifetime value (CLV) using the TheLook E-commerce
 - Looker Studio
 - VSCode
 - GitHub
+- LucidChart
 
 ## Dataset & Environment Setup
 
