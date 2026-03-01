@@ -25,23 +25,23 @@ Useful for a E-Commerce business to:
 
 ## Dataset & Environment Setup
 
-# Folder 01_data 
+### Folder 01_data 
 
 Source: TheLook E-commerce dataset (Kaggle) https://www.kaggle.com/datasets/daichiuchigashima/thelook-ecommerce
 
-Start here to see overview of data structure 
+View source schema to see data structure
 
 All modelling tables were created within the same dataset location (europe-west2) to avoid cross-region query issues and ensure consistent performance.
 
 ## Data Cleaning
 
-# Folder 02_notebook 
+### Folder 02_notebook 
 
 Written notes of exploration
 
 ## Data Modelling - Star Schema 
 
-# Folder 03_datamodelling 
+### Folder 03_datamodelling 
 
 The model follows a star schema design.
 
@@ -54,7 +54,7 @@ Dimension tables provide descriptive context:
 
 ## SQL Methodology
 
-# 04_sql_scripts 
+### 04_sql_scripts 
 
 The project includes 
 - CTES for structured transformations 
@@ -78,7 +78,7 @@ High Value, Loyal, At Risk, Churn Risk, New Customer
 
 ## Dashboard Overview 
 
-# 05_dashboard
+### 05_dashboard
 
 The dashboard structure: 
 - Summary KPIs 
