@@ -25,9 +25,9 @@ Useful for a E-Commerce business to:
 
 ## Dataset & Environment Setup
 
-### Folder 01_data 
+### 01_data 
 
-Source: TheLook E-commerce dataset (Kaggle) https://www.kaggle.com/datasets/daichiuchigashima/thelook-ecommerce
+Source: [TheLook E-commerce dataset (Kaggle)](https://www.kaggle.com/datasets/daichiuchigashima/thelook-ecommerce)
 
 View source schema to see data structure
 
@@ -35,13 +35,13 @@ All modelling tables were created within the same dataset location (europe-west2
 
 ## Data Cleaning
 
-### Folder 02_notebook 
+### 02_notebook 
 
 Written notes of exploration
 
 ## Data Modelling - Star Schema 
 
-### Folder 03_datamodelling 
+### 03_datamodelling 
 
 The model follows a star schema design.
 
@@ -64,21 +64,24 @@ The project includes
 -   NTILE () for RFM scoring 
 - Customer segmentation logic using CASE statements
 
-## RFM Methodology 
+RFM Methodology 
 
-Recency: Days since last purchase (using dataset max date)
-
-Frequency: Total number of completed orders
-
-Monetary: Total revenue per customer
+- Recency: Days since last purchase (using dataset max date)
+- Frequency: Total number of completed orders
+- Monetary: Total revenue per customer
 
 Customers are scored 1 to 5 using NTILE(5) and grouped into segments such as:
-
-High Value, Loyal, At Risk, Churn Risk, New Customer
+- High Value
+- Loyal 
+- At Risk
+- Churn Risk
+- New Customer
 
 ## Dashboard Overview 
 
 ### 05_dashboard
+
+[CLV Analysis Dashboard](https://lookerstudio.google.com/s/l6p1in5kUrY)
 
 The dashboard structure: 
 - Summary KPIs 
@@ -87,8 +90,6 @@ The dashboard structure:
 
 The customer_insights analytics model serves as the single source of truth for all visualisations.
 
-[CLV Analysis Dashboard](https://lookerstudio.google.com/s/l6p1in5kUrY)
-
 ## How to Reproduce This Project
 
 1. Load the TheLook dataset into BigQuery (UK region).
@@ -96,10 +97,7 @@ The customer_insights analytics model serves as the single source of truth for a
 2. Run transformation script:
 04_sql_scripts/4.1_transformations/01_staging.sql
 
-3. Create model tables following:
-03_data_modelling/star_schema.md
-
-4. Run analytical queries in order:
+3. Run analytical queries in order:
 
 - 02_analysis.sql
 
@@ -109,4 +107,4 @@ The customer_insights analytics model serves as the single source of truth for a
 
 - 05_customer_insights.sql
 
-5. Connect the final output table to Looker Studio to replicate the dashboard.
+4. Connect the final output table to Looker Studio to replicate the dashboard.
